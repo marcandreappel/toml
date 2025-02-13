@@ -30,9 +30,11 @@ final class TomlTokenizer
         '\\' => '\\',
     ];
 
-    protected TomlInputIterator $iterator;
+    /** @var TomlInputIterator */
+    protected $iterator;
 
     /**
+     * @param string $input
      * @throws TomlError
      */
     public function __construct(string $input)
@@ -111,14 +113,23 @@ final class TomlTokenizer
             return $this->scanBare($start);
         }
 
-        return match ($char) {
-            ' ', "\t" => $this->scanWhitespace($start),
-            '#' => $this->scanComment($start),
-            "'" => $this->scanLiteralString(),
-            '"' => $this->scanBasicString(),
-            TomlInputIterator::EOF => TomlToken::fromArray(['type' => TomlToken::EOF]),
-            default => throw new TomlError('unexpected character: '.$char),
-        };
+        if ($char === ' ' || $char === "\t") {
+            return $this->scanWhitespace($start);
+        }
+        if ($char === '#') {
+            return $this->scanComment($start);
+        }
+        if ($char === "'") {
+            return $this->scanLiteralString();
+        }
+        if ($char === '"') {
+            return $this->scanBasicString();
+        }
+        if ($char === TomlInputIterator::EOF) {
+            return TomlToken::fromArray(['type' => TomlToken::EOF]);
+        }
+
+        throw new TomlError('unexpected character: ' . $char);
     }
 
     protected function isPunctuatorOrNewline($char): bool
@@ -351,14 +362,20 @@ final class TomlTokenizer
     }
 
     /**
+     * @param TomlToken[] $types
+     * @return TomlToken[]
      * @throws TomlError
      */
     public function sequence(...$types): array
     {
-        return array_map(fn ($type) => $this->expect($type), $types);
+        return array_map(function ($type) {
+            return $this->expect($type);
+        }, $types);
     }
 
     /**
+     * @param string $type
+     * @return TomlToken
      * @throws TomlError
      */
     public function expect($type): TomlToken

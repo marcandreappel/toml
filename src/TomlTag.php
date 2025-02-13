@@ -12,7 +12,13 @@ use Throwable;
  */
 class TomlTag
 {
-    public static function tagObject(mixed $obj): array|stdClass
+    /**
+     * Tag an object with its TOML type information
+     *
+     * @param mixed $obj
+     * @return array|stdClass
+     */
+    public static function tagObject($obj)
     {
         if (is_int($obj)) {
             return ['type' => 'integer', 'value' => (string) $obj];
@@ -61,7 +67,9 @@ class TomlTag
         }
 
         if (is_array($obj)) {
-            return array_map(static fn ($item) => self::tagObject($item), $obj);
+            return array_map(function ($item) {
+                return self::tagObject($item);
+            }, $obj);
         }
 
         $tagged = new stdClass;
@@ -78,13 +86,19 @@ class TomlTag
     }
 
     /**
+     * Untag an object from its TOML type information
+     *
+     * @param mixed $obj
+     * @return mixed
      * @throws Throwable
      * @throws TomlError
      */
     public static function untagObject($obj)
     {
         if (is_array($obj)) {
-            return array_map(static fn ($item) => self::untagObject($item), $obj);
+            return array_map(function ($item) {
+                return self::untagObject($item);
+            }, $obj);
         }
 
         if (property_exists($obj, 'type') && property_exists($obj, 'value') && count(get_object_vars($obj)) === 2) {
