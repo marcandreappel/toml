@@ -5,9 +5,10 @@ use Devium\Toml\TomlError;
 
 if (! function_exists('toml_encode')) {
     /**
+     * @param array|stdClass $toml
      * @throws TomlError
      */
-    function toml_encode(array|stdClass $toml): string
+    function toml_encode(mixed $toml): string
     {
         return Toml::encode($toml);
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Devium\Toml;
+namespace MAA\Toml;
 
 use DateTimeImmutable;
 use Stringable;

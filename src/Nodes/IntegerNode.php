@@ -1,11 +1,15 @@
 <?php
 
-namespace Devium\Toml\Nodes;
+namespace MAA\Toml\Nodes;
 
 /**
  * @internal
  */
 final class IntegerNode implements Node, NumericNode, ValuableNode
 {
-    public function __construct(public readonly int $value) {}
+    public $value;
+    public function __construct(int $value)
+    {
+        $this->value = $value;
+    }
 }

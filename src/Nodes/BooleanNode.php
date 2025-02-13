@@ -1,11 +1,15 @@
 <?php
 
-namespace Devium\Toml\Nodes;
+namespace MAA\Toml\Nodes;
 
 /**
  * @internal
  */
 final class BooleanNode implements Node, ValuableNode
 {
-    public function __construct(public readonly bool $value) {}
+    public $value;
+    public function __construct(bool $value)
+    {
+        $this->value = $value;
+    }
 }

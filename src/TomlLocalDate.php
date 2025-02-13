@@ -1,6 +1,6 @@
 <?php
 
-namespace Devium\Toml;
+namespace MAA\Toml;
 
 final class TomlLocalDate extends TomlInternalDateTime
 {

@@ -1,18 +1,26 @@
 <?php
 
-namespace Devium\Toml\Nodes;
+namespace MAA\Toml\Nodes;
 
 /**
  * @internal
  */
 final class KeyNode implements Node
 {
+    private $keys;
+
     /**
      * @param  BareNode[]|StringNode[]  $keys
      */
-    public function __construct(private array $keys) {}
+    public function __construct(array $keys)
+    {
+        $this->keys = $keys;
+    }
 
-    public function addKey(BareNode|StringNode $key): void
+    /**
+     * @param  BareNode|StringNode $key
+     */
+    public function addKey(mixed $key): void
     {
         $this->keys[] = $key;
     }

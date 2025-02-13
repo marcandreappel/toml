@@ -1,6 +1,6 @@
 <?php
 
-namespace Devium\Toml;
+namespace MAA\Toml;
 
 use Devium\Toml\Nodes\ArrayNode;
 use Devium\Toml\Nodes\ArrayTableNode;

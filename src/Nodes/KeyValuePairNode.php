@@ -1,14 +1,18 @@
 <?php
 
-namespace Devium\Toml\Nodes;
+namespace MAA\Toml\Nodes;
 
 /**
  * @internal
  */
 final class KeyValuePairNode implements Node
 {
-    public function __construct(
-        public readonly KeyNode $key,
-        public readonly ValuableNode $value
-    ) {}
+    public $key;
+    public $value;
+
+    public function __construct(KeyNode $key, ValuableNode $value)
+    {
+        $this->key = $key;
+        $this->value = $value;
+    }
 }

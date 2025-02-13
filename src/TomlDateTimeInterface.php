@@ -1,5 +1,5 @@
 <?php
 
-namespace Devium\Toml;
+namespace MAA\Toml;
 
 interface TomlDateTimeInterface {}

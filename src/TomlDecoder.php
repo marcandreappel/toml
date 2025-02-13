@@ -1,6 +1,6 @@
 <?php
 
-namespace Devium\Toml;
+namespace MAA\Toml;
 
 use DateTimeInterface;
 use stdClass;
@@ -12,8 +12,9 @@ class TomlDecoder
 {
     /**
      * @throws TomlError
+     * @return array|stdClass
      */
-    public static function decode(string $input, bool $asArray = false, bool $asFloat = false): array|stdClass
+    public static function decode(string $input, bool $asArray = false, bool $asFloat = false): mixed
     {
         $parser = new TomlParser($input, $asFloat);
 
@@ -41,7 +42,11 @@ class TomlDecoder
         return $object;
     }
 
-    protected static function toObject(array|TomlObject $arrayObject): array|object
+    /**
+     * @param array|TomlObject
+     * @return array|object
+     */
+    protected static function toObject(mixed $arrayObject): mixed
     {
         $return = [];
 

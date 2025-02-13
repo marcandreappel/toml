@@ -1,11 +1,16 @@
 <?php
 
-namespace Devium\Toml\Nodes;
+namespace MAA\Toml\Nodes;
 
 /**
  * @internal
  */
 final class BareNode implements Node
 {
-    public function __construct(public readonly string $value) {}
+    public $value;
+
+    public function __construct(string $value)
+    {
+        $this->value = $value;
+    }
 }

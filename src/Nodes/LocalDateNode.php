@@ -1,6 +1,6 @@
 <?php
 
-namespace Devium\Toml\Nodes;
+namespace MAA\Toml\Nodes;
 
 use Devium\Toml\TomlLocalDate;
 

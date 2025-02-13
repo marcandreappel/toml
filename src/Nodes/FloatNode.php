@@ -1,11 +1,15 @@
 <?php
 
-namespace Devium\Toml\Nodes;
+namespace MAA\Toml\Nodes;
 
 /**
  * @internal
  */
 final class FloatNode implements Node, NumericNode, ValuableNode
 {
-    public function __construct(public readonly float|string $value) {}
+    public $value;
+    public function __construct(mixed $value)
+    {
+        $this->value = $value;
+    }
 }
