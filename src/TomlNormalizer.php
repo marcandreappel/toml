@@ -1,5 +1,3 @@
-// ... existing code ...
-
 <?php
 
 namespace MAA\Toml;

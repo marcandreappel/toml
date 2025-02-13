@@ -20,7 +20,7 @@ final class KeyNode implements Node
     /**
      * @param  BareNode|StringNode $key
      */
-    public function addKey(mixed $key): void
+    public function addKey($key): void
     {
         $this->keys[] = $key;
     }

@@ -393,7 +393,7 @@ final class TomlParser
     {
         try {
             return new TomlDateTime($value);
-        } catch (Throwable) {
+        } catch (Throwable $e) {
             throw new TomlError('error during datetime parsing');
         }
     }
@@ -652,9 +652,10 @@ final class TomlParser
     }
 
     /**
+     * @return FloatNode|IntegerNode
      * @throws TomlError
      */
-    protected function plus(): FloatNode|IntegerNode
+    protected function plus()
     {
         $token = $this->tokenizer->expect(TomlToken::BARE);
 
