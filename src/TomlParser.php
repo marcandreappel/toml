@@ -2,25 +2,25 @@
 
 namespace MAA\Toml;
 
-use Devium\Toml\Nodes\ArrayNode;
-use Devium\Toml\Nodes\ArrayTableNode;
-use Devium\Toml\Nodes\BareNode;
-use Devium\Toml\Nodes\BooleanNode;
-use Devium\Toml\Nodes\FloatNode;
-use Devium\Toml\Nodes\InlineTableNode;
-use Devium\Toml\Nodes\IntegerNode;
-use Devium\Toml\Nodes\KeyNode;
-use Devium\Toml\Nodes\KeyValuePairNode;
-use Devium\Toml\Nodes\LocalDateNode;
-use Devium\Toml\Nodes\LocalDateTimeNode;
-use Devium\Toml\Nodes\LocalTimeNode;
-use Devium\Toml\Nodes\NumericNode;
-use Devium\Toml\Nodes\OffsetDateTimeNode;
-use Devium\Toml\Nodes\RootTableNode;
-use Devium\Toml\Nodes\StringNode;
-use Devium\Toml\Nodes\TableNode;
-use Devium\Toml\Nodes\TomlDateTimeNode;
-use Devium\Toml\Nodes\ValuableNode;
+use MAA\Toml\Nodes\ArrayNode;
+use MAA\Toml\Nodes\ArrayTableNode;
+use MAA\Toml\Nodes\BareNode;
+use MAA\Toml\Nodes\BooleanNode;
+use MAA\Toml\Nodes\FloatNode;
+use MAA\Toml\Nodes\InlineTableNode;
+use MAA\Toml\Nodes\IntegerNode;
+use MAA\Toml\Nodes\KeyNode;
+use MAA\Toml\Nodes\KeyValuePairNode;
+use MAA\Toml\Nodes\LocalDateNode;
+use MAA\Toml\Nodes\LocalDateTimeNode;
+use MAA\Toml\Nodes\LocalTimeNode;
+use MAA\Toml\Nodes\NumericNode;
+use MAA\Toml\Nodes\OffsetDateTimeNode;
+use MAA\Toml\Nodes\RootTableNode;
+use MAA\Toml\Nodes\StringNode;
+use MAA\Toml\Nodes\TableNode;
+use MAA\Toml\Nodes\TomlDateTimeNode;
+use MAA\Toml\Nodes\ValuableNode;
 use Throwable;
 
 /**
