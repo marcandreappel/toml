@@ -4,19 +4,40 @@ namespace MAA\Toml;
 
 final class TomlLocalTime extends TomlInternalDateTime
 {
-    public readonly int $millisecond;
+    /** @var int */
+    public $hour;
 
+    /** @var int */
+    public $minute;
+
+    /** @var int */
+    public $second;
+
+    /** @var int */
+    public $millisecond;
+
+    /**
+     * @param int $hour
+     * @param int $minute
+     * @param int $second
+     * @param int|string $millisecond
+     */
     public function __construct(
-        public readonly int $hour,
-        public readonly int $minute,
-        public readonly int $second,
+        int $hour,
+        int $minute,
+        int $second,
         $millisecond
     ) {
+        $this->hour = $hour;
+        $this->minute = $minute;
+        $this->second = $second;
         $this->millisecond = (int) substr((string) $millisecond, 0, 3);
     }
 
     /**
+     * @param mixed $value
      * @throws TomlError
+     * @return self
      */
     public static function fromString($value): self
     {

@@ -8,16 +8,24 @@ final class TomlError extends Exception
 {
     public const RE = '/\r\n|\n|\r/';
 
-    public mixed $tomlLine;
+    /** @var mixed */
+    public $tomlLine;
 
-    public mixed $tomlColumn;
+    /** @var mixed */
+    public $tomlColumn;
 
-    public string $tomlCodeBlock;
+    /** @var string */
+    public $tomlCodeBlock;
 
+    /**
+     * @param string $message
+     * @param string $toml
+     * @param int $position
+     */
     public function __construct(
         string $message = '',
         string $toml = '',
-        int $position = -1,
+        int $position = -1
     ) {
         if ($position < 0) {
             parent::__construct($message);

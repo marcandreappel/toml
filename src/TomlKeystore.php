@@ -2,12 +2,12 @@
 
 namespace MAA\Toml;
 
-use Devium\Toml\Nodes\ArrayTableNode;
-use Devium\Toml\Nodes\BareNode;
-use Devium\Toml\Nodes\KeyNode;
-use Devium\Toml\Nodes\KeyValuePairNode;
-use Devium\Toml\Nodes\StringNode;
-use Devium\Toml\Nodes\TableNode;
+use MAA\Toml\Nodes\ArrayTableNode;
+use MAA\Toml\Nodes\BareNode;
+use MAA\Toml\Nodes\KeyNode;
+use MAA\Toml\Nodes\KeyValuePairNode;
+use MAA\Toml\Nodes\StringNode;
+use MAA\Toml\Nodes\TableNode;
 use Ds\Set;
 
 /**
@@ -15,13 +15,17 @@ use Ds\Set;
  */
 final class TomlKeystore
 {
-    private readonly Set $keys;
+    /** @var Set */
+    private $keys;
 
-    private readonly Set $tables;
+    /** @var Set */
+    private $tables;
 
-    private readonly Set $arrayTables;
+    /** @var Set */
+    private $arrayTables;
 
-    private readonly Set $implicitTables;
+    /** @var Set */
+    private $implicitTables;
 
     public function __construct()
     {
@@ -32,11 +36,13 @@ final class TomlKeystore
     }
 
     /**
+     * @param KeyValuePairNode|TableNode|ArrayTableNode $node
      * @throws TomlError
      */
-    public function addNode(KeyValuePairNode|TableNode|ArrayTableNode $node): void
+    public function addNode($node): void
     {
-        switch ($node::class) {
+        $nodeClass = get_class($node);
+        switch ($nodeClass) {
             case KeyValuePairNode::class:
                 $this->addKeyValuePairNode($node);
                 break;
@@ -89,9 +95,14 @@ final class TomlKeystore
         $this->keysAdd($key);
     }
 
+    /**
+     * @return array
+     */
     protected function makeKeyComponents(KeyNode $keyNode): array
     {
-        return array_map(static fn (BareNode|StringNode $key) => $key->value, $keyNode->keys());
+        return array_map(function ($key) {
+            return $key->value;
+        }, $keyNode->keys());
     }
 
     protected function keysContains(string $key): bool
@@ -135,7 +146,7 @@ final class TomlKeystore
         $foundArrayTable = null;
 
         foreach ($arrayTable as $arrayTableItem) {
-            if (str_starts_with($header, $this->makeHeaderFromArrayTable($arrayTableItem))) {
+            if ($this->startsWith($header, $this->makeHeaderFromArrayTable($arrayTableItem))) {
                 $foundArrayTable = $arrayTableItem;
 
                 break;
@@ -149,7 +160,9 @@ final class TomlKeystore
 
             $components = array_filter(
                 $this->unescapedExplode('.', substr($header, strlen($foundArrayTableHeader))),
-                static fn (string $component) => $component !== ''
+                function (string $component) {
+                    return $component !== '';
+                }
             );
 
             if ($components === []) {
@@ -161,7 +174,6 @@ final class TomlKeystore
 
         $i = 0;
         foreach ($components as $component) {
-
             $component = str_replace('.', '\.', $component);
 
             $key .= ($i !== 0 ? '.' : '').$component;
@@ -191,7 +203,9 @@ final class TomlKeystore
             '.',
             array_filter(
                 $this->unescapedExplode('.', $arrayTable),
-                static fn ($item) => ! str_starts_with((string) $item, '[')
+                function ($item) {
+                    return !$this->startsWith((string) $item, '[');
+                }
             )
         );
     }
@@ -199,7 +213,9 @@ final class TomlKeystore
     protected function unescapedExplode(string $character, string $value): array
     {
         return array_map(
-            static fn ($item) => str_replace(__METHOD__, $character, $item),
+            function ($item) use ($character) {
+                return str_replace(__METHOD__, $character, $item);
+            },
             explode($character, str_replace('\\'.$character, __METHOD__, $value))
         );
     }
@@ -235,7 +251,7 @@ final class TomlKeystore
                 continue;
             }
 
-            if (str_starts_with($header, $arrayTableHeader)) {
+            if ($this->startsWith($header, $arrayTableHeader)) {
                 $key = $arrayTable.substr($header, strlen($arrayTableHeader));
 
                 break;
@@ -243,7 +259,9 @@ final class TomlKeystore
         }
 
         if ($index === 0 && ! $this->tables->filter(
-            static fn ($table) => str_starts_with((string) $table, $header))->isEmpty()
+            function ($table) use ($header) {
+                return $this->startsWith((string) $table, $header);
+            })->isEmpty()
         ) {
             throw new TomlError('key duplication');
         }
@@ -255,5 +273,13 @@ final class TomlKeystore
         $key .= ".[$index]";
         $this->arrayTables->add($key);
         $this->tables->add($key);
+    }
+
+    /**
+     * Polyfill for str_starts_with()
+     */
+    private function startsWith(string $haystack, string $needle): bool
+    {
+        return strncmp($haystack, $needle, strlen($needle)) === 0;
     }
 }

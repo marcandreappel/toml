@@ -4,14 +4,33 @@ namespace MAA\Toml;
 
 final class TomlLocalDate extends TomlInternalDateTime
 {
+    /** @var int */
+    public $year;
+
+    /** @var int */
+    public $month;
+
+    /** @var int */
+    public $day;
+    /**
+     * @param int $year
+     * @param int $month
+     * @param int $day
+     */
     public function __construct(
-        public readonly int $year,
-        public readonly int $month,
-        public readonly int $day,
-    ) {}
+        int $year,
+        int $month,
+        int $day
+    ) {
+        $this->year = $year;
+        $this->month = $month;
+        $this->day = $day;
+    }
 
     /**
+     * @param mixed $value
      * @throws TomlError
+     * @return self
      */
     public static function fromString($value): self
     {

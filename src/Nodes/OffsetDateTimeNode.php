@@ -2,12 +2,20 @@
 
 namespace MAA\Toml\Nodes;
 
-use Devium\Toml\TomlDateTime;
+use MAA\Toml\TomlDateTime;
 
 /**
  * @internal
  */
 final class OffsetDateTimeNode implements Node, TomlDateTimeNode, ValuableNode
 {
-    public function __construct(public readonly TomlDateTime $value) {}
+    public $value;
+
+    /**
+     * @param TomlDateTime $value
+     */
+    public function __construct(TomlDateTime $value)
+    {
+        $this->value = $value;
+    }
 }

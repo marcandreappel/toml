@@ -8,6 +8,10 @@ namespace MAA\Toml\Nodes;
 final class BooleanNode implements Node, ValuableNode
 {
     public $value;
+
+    /**
+     * @param bool $value
+     */
     public function __construct(bool $value)
     {
         $this->value = $value;

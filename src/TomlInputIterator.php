@@ -9,12 +9,21 @@ final class TomlInputIterator
 {
     public const EOF = '-1';
 
-    public int $pos = -1;
+    /** @var int */
+    public $pos = -1;
 
-    private readonly int $inputLength;
+    /** @var int */
+    private $inputLength;
 
-    public function __construct(public readonly string $input)
+    /** @var string */
+    public $input;
+
+    /**
+     * @param string $input
+     */
+    public function __construct(string $input)
     {
+        $this->input = $input;
         $this->inputLength = strlen($this->input);
     }
 

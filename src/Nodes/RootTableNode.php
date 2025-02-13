@@ -7,14 +7,20 @@ namespace MAA\Toml\Nodes;
  */
 final class RootTableNode implements Node
 {
+    protected $elements;
+
     /**
      * @param  KeyValuePairNode[] | TableNode[] | ArrayTableNode[]  $elements
      */
-    public function __construct(
-        protected array $elements
-    ) {}
+    public function __construct(array $elements)
+    {
+        $this->elements = $elements;
+    }
 
-    public function addElement(KeyValuePairNode|TableNode|ArrayTableNode $element): void
+    /**
+     * @param KeyValuePairNode|TableNode|ArrayTableNode $element
+     */
+    public function addElement($element): void
     {
         $this->elements[] = $element;
     }

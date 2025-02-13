@@ -1,23 +1,25 @@
+// ... existing code ...
+
 <?php
 
 namespace MAA\Toml;
 
-use Devium\Toml\Nodes\ArrayNode;
-use Devium\Toml\Nodes\ArrayTableNode;
-use Devium\Toml\Nodes\BareNode;
-use Devium\Toml\Nodes\BooleanNode;
-use Devium\Toml\Nodes\FloatNode;
-use Devium\Toml\Nodes\InlineTableNode;
-use Devium\Toml\Nodes\IntegerNode;
-use Devium\Toml\Nodes\KeyNode;
-use Devium\Toml\Nodes\KeyValuePairNode;
-use Devium\Toml\Nodes\LocalDateNode;
-use Devium\Toml\Nodes\LocalDateTimeNode;
-use Devium\Toml\Nodes\LocalTimeNode;
-use Devium\Toml\Nodes\OffsetDateTimeNode;
-use Devium\Toml\Nodes\RootTableNode;
-use Devium\Toml\Nodes\StringNode;
-use Devium\Toml\Nodes\TableNode;
+use MAA\Toml\Nodes\ArrayNode;
+use MAA\Toml\Nodes\ArrayTableNode;
+use MAA\Toml\Nodes\BareNode;
+use MAA\Toml\Nodes\BooleanNode;
+use MAA\Toml\Nodes\FloatNode;
+use MAA\Toml\Nodes\InlineTableNode;
+use MAA\Toml\Nodes\IntegerNode;
+use MAA\Toml\Nodes\KeyNode;
+use MAA\Toml\Nodes\KeyValuePairNode;
+use MAA\Toml\Nodes\LocalDateNode;
+use MAA\Toml\Nodes\LocalDateTimeNode;
+use MAA\Toml\Nodes\LocalTimeNode;
+use MAA\Toml\Nodes\OffsetDateTimeNode;
+use MAA\Toml\Nodes\RootTableNode;
+use MAA\Toml\Nodes\StringNode;
+use MAA\Toml\Nodes\TableNode;
 
 /**
  * @internal
@@ -25,11 +27,14 @@ use Devium\Toml\Nodes\TableNode;
 final class TomlNormalizer
 {
     /**
+     * @param Nodes\Node $node
+     * @return mixed
      * @throws TomlError
      */
-    public static function normalize(Nodes\Node $node): mixed
+    public static function normalize($node)
     {
-        switch ($node::class) {
+        $nodeClass = get_class($node);
+        switch ($nodeClass) {
             case InlineTableNode::class:
             case RootTableNode::class:
                 $elements = self::mapNormalize($node->elements());
@@ -40,7 +45,6 @@ final class TomlNormalizer
                 return self::mapNormalize($node->keys());
 
             case KeyValuePairNode::class:
-
                 $key = self::normalize($node->key);
                 $value = self::normalize($node->value);
 
@@ -73,26 +77,31 @@ final class TomlNormalizer
                 return $node->value;
 
             default:
-                throw new TomlError('unsupported type: '.$node::class);
+                throw new TomlError('unsupported type: '.$nodeClass);
         }
     }
 
     /**
+     * @param array $items
+     * @return array
      * @throws TomlError
      */
     protected static function mapNormalize(array $items): array
     {
-        return array_map(static fn ($element) => self::normalize($element), $items);
+        return array_map(function ($element) {
+            return self::normalize($element);
+        }, $items);
     }
 
     /**
+     * @param mixed ...$values
+     * @return TomlObject
      * @throws TomlError
      */
     protected static function merge(...$values): TomlObject
     {
         return array_reduce($values, function (TomlObject $acc, $value) {
             foreach ($value as $key => $nextValue) {
-
                 $prevValue = $acc->offsetExists($key) ? $acc->offsetGet($key) : null;
 
                 if (is_array($prevValue) && is_array($nextValue)) {
@@ -118,6 +127,10 @@ final class TomlNormalizer
         }, new TomlObject([]));
     }
 
+    /**
+     * @param mixed $value
+     * @return bool
+     */
     protected static function isKeyValuePair($value): bool
     {
         if ($value instanceof TomlInternalDateTime) {
@@ -128,7 +141,9 @@ final class TomlNormalizer
     }
 
     /**
-     * @param  string[]  $keys
+     * @param string[] $keys
+     * @param mixed $value
+     * @return TomlObject
      */
     protected static function objectify(array $keys, $value): TomlObject
     {

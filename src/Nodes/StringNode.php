@@ -7,5 +7,13 @@ namespace MAA\Toml\Nodes;
  */
 final class StringNode implements Node, ValuableNode
 {
-    public function __construct(public readonly string $value) {}
+    public $value;
+
+    /**
+     * @param string $value
+     */
+    public function __construct(string $value)
+    {
+        $this->value = $value;
+    }
 }

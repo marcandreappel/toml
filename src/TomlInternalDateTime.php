@@ -4,23 +4,22 @@ namespace MAA\Toml;
 
 use DateTimeInterface;
 use DateTimeZone;
-use Stringable;
-
 /**
  * @internal
  */
-abstract class TomlInternalDateTime implements Stringable, TomlDateTimeInterface
+abstract class TomlInternalDateTime implements TomlDateTimeInterface
 {
     public static function toTOMLString(DateTimeInterface $dateTime): string
     {
         $ms = $dateTime->format('u');
+        $utcDateTime = (new \DateTime())->setTimestamp($dateTime->getTimestamp())
+            ->setTimezone(new DateTimeZone('UTC'));
 
         return str_replace(
             '~',
             substr($ms, 0, 3),
-            $dateTime
-                ->setTimezone(new DateTimeZone('UTC'))
-                ->format('Y-m-d\TH:i:s.~p'));
+            $utcDateTime->format('Y-m-d\TH:i:s.~p')
+        );
     }
 
     public static function isValidFebruary(int $year, int $month, int $day): bool

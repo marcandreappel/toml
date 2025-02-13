@@ -1,6 +1,6 @@
 <?php
 
-use Devium\Toml\TomlError;
+use MAA\Toml\TomlError;
 
 it('can encode TOML',
     /**

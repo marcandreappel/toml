@@ -2,12 +2,20 @@
 
 namespace MAA\Toml\Nodes;
 
-use Devium\Toml\TomlLocalTime;
+use MAA\Toml\TomlLocalTime;
 
 /**
  * @internal
  */
 final class LocalTimeNode implements Node, TomlDateTimeNode, ValuableNode
 {
-    public function __construct(public readonly TomlLocalTime $value) {}
+    public $value;
+
+    /**
+     * @param TomlLocalTime $value
+     */
+    public function __construct(TomlLocalTime $value)
+    {
+        $this->value = $value;
+    }
 }

@@ -7,13 +7,18 @@ namespace MAA\Toml\Nodes;
  */
 class TableNode implements Node
 {
+    public $key;
+    private $elements;
+
     /**
+     * @param  KeyNode  $key
      * @param  KeyValuePairNode[]  $elements
      */
-    public function __construct(
-        public readonly KeyNode $key,
-        private array $elements
-    ) {}
+    public function __construct(KeyNode $key, array $elements)
+    {
+        $this->key = $key;
+        $this->elements = $elements;
+    }
 
     public function addElement(KeyValuePairNode $element): void
     {

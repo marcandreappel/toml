@@ -4,18 +4,57 @@ namespace MAA\Toml;
 
 final class TomlLocalDateTime extends TomlInternalDateTime
 {
+    /** @var int */
+    public $year;
+
+    /** @var int */
+    public $month;
+
+    /** @var int */
+    public $day;
+
+    /** @var int */
+    public $hour;
+
+    /** @var int */
+    public $minute;
+
+    /** @var int */
+    public $second;
+
+    /** @var int */
+    public $millisecond;
+    /**
+     * @param int $year
+     * @param int $month
+     * @param int $day
+     * @param int $hour
+     * @param int $minute
+     * @param int $second
+     * @param int $millisecond
+     */
     public function __construct(
-        public readonly int $year,
-        public readonly int $month,
-        public readonly int $day,
-        public readonly int $hour,
-        public readonly int $minute,
-        public readonly int $second,
-        public readonly int $millisecond,
-    ) {}
+        int $year,
+        int $month,
+        int $day,
+        int $hour,
+        int $minute,
+        int $second,
+        int $millisecond
+    ) {
+        $this->year = $year;
+        $this->month = $month;
+        $this->day = $day;
+        $this->hour = $hour;
+        $this->minute = $minute;
+        $this->second = $second;
+        $this->millisecond = $millisecond;
+    }
 
     /**
+     * @param mixed $value
      * @throws TomlError
+     * @return self
      */
     public static function fromString($value): self
     {
@@ -29,7 +68,13 @@ final class TomlLocalDateTime extends TomlInternalDateTime
         $time = TomlLocalTime::fromString($components[1]);
 
         return new self(
-            $date->year, $date->month, $date->day, $time->hour, $time->minute, $time->second, $time->millisecond
+            $date->year,
+            $date->month,
+            $date->day,
+            $time->hour,
+            $time->minute,
+            $time->second,
+            $time->millisecond
         );
     }
 

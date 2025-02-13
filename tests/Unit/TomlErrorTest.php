@@ -1,6 +1,6 @@
 <?php
 
-use Devium\Toml\TomlError;
+use MAA\Toml\TomlError;
 
 it('shows code block and caret',
     /**

@@ -2,7 +2,7 @@
 
 <?php
 
-use Devium\Toml\TomlTag;
+use MAA\Toml\TomlTag;
 
 include_once './vendor/autoload.php';
 

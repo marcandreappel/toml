@@ -14,7 +14,7 @@ class TomlDecoder
      * @throws TomlError
      * @return array|stdClass
      */
-    public static function decode(string $input, bool $asArray = false, bool $asFloat = false): mixed
+    public static function decode(string $input, bool $asArray = false, bool $asFloat = false)
     {
         $parser = new TomlParser($input, $asFloat);
 
@@ -25,7 +25,7 @@ class TomlDecoder
         return self::toObject(TomlNormalizer::normalize($parser->parse()));
     }
 
-    protected static function toArray(mixed $object): mixed
+    protected static function toArray($object)
     {
         if ($object instanceof DateTimeInterface) {
             return $object;
@@ -46,7 +46,7 @@ class TomlDecoder
      * @param array|TomlObject
      * @return array|object
      */
-    protected static function toObject(mixed $arrayObject): mixed
+    protected static function toObject($arrayObject)
     {
         $return = [];
 

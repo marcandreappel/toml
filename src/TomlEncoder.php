@@ -13,9 +13,10 @@ class TomlEncoder
     protected const BARE_KEY = '/^[a-z0-9-_]+$/i';
 
     /**
+     * @param array|stdClass $input
      * @throws TomlError
      */
-    public static function encode(array|stdClass $input): string
+    public static function encode($input): string
     {
         if (is_array($input)) {
             $input = self::toObject($input);
@@ -28,12 +29,15 @@ class TomlEncoder
         return self::stringifyTable($input);
     }
 
-    protected static function toObject(array $arrayObject): array|object
+    /**
+     * @return array|object
+     */
+    protected static function toObject(array $arrayObject)
     {
         $return = new stdClass;
 
         foreach ($arrayObject as $key => $value) {
-            if (is_array($value) && array_is_list($value)) {
+            if (is_array($value) && self::isListArray($value)) {
                 $return->{$key} = (array) self::toObject($value);
             } elseif ($value instanceof DateTimeInterface) {
                 $return->{$key} = $value;
@@ -47,7 +51,18 @@ class TomlEncoder
         return $return;
     }
 
-    protected static function extendedTypeOf(mixed $obj): string
+    /**
+     * Polyfill for array_is_list()
+     */
+    protected static function isListArray(array $arr): bool
+    {
+        if ($arr === []) {
+            return true;
+        }
+        return array_keys($arr) === range(0, count($arr) - 1);
+    }
+
+    protected static function extendedTypeOf($obj): string
     {
         if ($obj instanceof TomlDateTimeInterface) {
             return 'date';
@@ -57,7 +72,7 @@ class TomlEncoder
             return 'date';
         }
 
-        if (is_array($obj) && array_is_list($obj)) {
+        if (is_array($obj) && self::isListArray($obj)) {
             return 'array';
         }
 
@@ -135,8 +150,9 @@ class TomlEncoder
 
     /**
      * @throws TomlError
+     * @param mixed $value
      */
-    protected static function stringifyValue(mixed $value, ?string $type = null): string
+    protected static function stringifyValue($value, ?string $type = null): string
     {
         if ($type === null) {
             $type = self::extendedTypeOf($value);
@@ -193,8 +209,9 @@ class TomlEncoder
 
     /**
      * @throws TomlError
+     * @param array|stdClass $obj
      */
-    protected static function stringifyInlineTable(array|stdClass $obj): string
+    protected static function stringifyInlineTable($obj): string
     {
         $keys = array_keys((array) $obj);
         if ($keys === []) {
